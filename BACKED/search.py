@@ -3,6 +3,23 @@ import requests
 from urlIfor import previewUrl
 
 
+import http.server
+import socketserver
+
+PORT = 8080
+
+# Start the proxy server
+Handler = http.server.SimpleHTTPRequestHandler
+
+with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    print("serving at port", PORT)
+
+    # Define the proxies dictionary with the address of the proxy server
+    proxies = {
+        'http': 'http://localhost:8080'
+    }
+
+
 class Scrapper:
     def search_google(query, num_results=10, lang="en"):
         headers = {
@@ -11,7 +28,8 @@ class Scrapper:
         }
         escaped_query = query.replace(' ', '+')
         google_url = f'https://www.google.com/search?q={escaped_query}&num={num_results}&hl={lang}'
-        response = requests.get(google_url, headers=headers)
+
+        response = requests.get(google_url, headers=headers, proxies=proxies)
         response.raise_for_status()
         results = Scrapper.parse_google_results(response.text)
         return results
