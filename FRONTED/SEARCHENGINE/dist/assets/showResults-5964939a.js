@@ -1,1 +1,0 @@
-import{_ as t,o as s,c as o}from"./index-c0bac5a1.js";const a={data(){return{search:null}},created(){const e=this.$route.params.id;this.search=e,console.log(e)}};function r(e,c,n,d,l,p){return s(),o("div")}const i=t(a,[["render",r]]);export{i as default};
