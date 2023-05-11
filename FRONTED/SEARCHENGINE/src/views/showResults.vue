@@ -1,17 +1,22 @@
 <template>
   <div>
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque officia maxime minima soluta eveniet doloribus tempore expedita, aliquid iure debitis! Dolorem laudantium eos blanditiis. Esse molestiae incidunt doloribus accusamus quam.
+
 
 
   </div>
 </template>
 <script>
 export default {
-  setup () {
+data() {
+  return {
     
-
-    return {}
   }
+  },
+
+  created() {
+    const data = this.$router.currentRoute.params.id;
+    console.log(data);
+  },
 }
 </script>
 
