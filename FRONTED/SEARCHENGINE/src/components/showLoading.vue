@@ -2,7 +2,7 @@
     <div>
     <div class="containerLoader"></div>
     <div class="query">
-    <span>Loading Reasult for: "{{ myquery }}"</span>
+    <span>Preparing Result for: "{{ myquery }}"</span>
     </div>
     <br>
     <div>

@@ -1,63 +1,107 @@
 <script setup>
-import showLoading from '../components/showLoading.vue'
+import showLoading from '../components/showLoading.vue';
+import ToEternalLink from '../components/ToExternalLink.vue';
 
 </script>
 
 <template>
-  <div class="containerWrapper">
+  <div>
+  <div class="resultPage">
+  <div class="hideResult" v-if="show">
+  <showLoading :myquery="query" />
+  </div>
 
-          <showLoading id="showLoading" v-if="show" :myquery="search" />
-
-          <div class="topsearchbar">
-              <div class="searchBar">
-                  <div class="logo">
-                      Custom Search <br> engine
-                  </div>
-                  <div>
-                      <div class="items-wrapper">
-                          <input type="text" placeholder="search" v-model="query">
-                          <span class="search" @click="Searchquery"><i class="fas fa-search"
-                                  style="font-size: 1rem;"></i></span>
-                      </div>
-                  </div>
-              </div>
-
-          </div>
-          <div class="seperator"></div>
-          <div class="cartegorybar">
-              <div class="tabs">
-                  <span>showing result for "{{ search }}"</span>
-              </div>
-              <div class="showResults">
-                  <ul>
-                      <li v-for="(result, index) in results" :key="index" class="resultBlock">
-                          <div class="link">
-                              <a :href="result.url">{{ result.url }}</a>
-                          </div>
-                          <div class="title">{{ result.title }} </div>
-                          <div class="content">{{ result.snippet }}</div>
-                      </li>
-                  </ul>
-
-              </div>
-          </div>
+  <div class="hideResult" v-if="showEternal">
+    <ToEternalLink :myquery="query"/>
+  </div>
+  <div class="topWrapper">
+  <div class="topbar">
+    <div class="logo">
+    <span>
+    Custom search engine
+    </span>
+    </div>
+   <div class="inputContainer">
+    <input type="text" v-model="querySearch">
+    <span class="search" @click="Searchquery"><i class="fas fa-search" style="font-size: 1.5rem;"></i></span>
+   </div>
+    </div>
+  </div>
+  <div class="emptydiv">
+      
       </div>
+  <div class="searchResultsContainer">
+  <div class=""></div>
+  <div class="resutsWrapper">
+  <div class="indicateResult">showing result for <span>{{ query }}</span></div>
+  <ul>
+  <li v-for="(result, index) in results" :key="index" class="resultBlock">
+    <div class="link">
+    <span class="customLink" @click="checkResults(result.url)" >{{ result.url }}</span>
+      <!-- <a :href="result.url">{{ result.url }}</a> -->
+    </div>
+    <div class="title">{{ result.title }} </div>
+    <div class="content">{{ result.snippet }}</div>
+  </li>
+        </ul>
+  </div>
+  
+  </div>  
+  </div>
+
+  </div>
 </template>
+
 <script>
 import axios from 'axios';
 export default {
-data() {
-    return {
-      search: null,
-      show:false
-    
-  }
+    data() {
+      return {
+        query: null,
+        show: true,
+        results: [],
+        showEternal: false,
+        querySearch:true
+      }
   },
+  methods: {
+      Searchquery() {
+      if (this.query != null) {
+        this.show = true
+        const searchUrl = `?q=${encodeURIComponent(this.query)}`;
+        this.$router.push({ name: 'result', params: { string: searchUrl, id: this.query } });
+         const data = this.querySearch;
+        this.query = this.querySearch
+        axios.post("/search", { "query": data })
+          .then((res) => {
+            this.results = res.data.result
+            this.show = false;
+          })
+          .catch((err) => {
 
+          })
+
+        
+
+      }
+    },
+    checkResults(value)
+    {
+      this.show = true
+      this.showEternal = true;
+      this.query = value;
+      setTimeout(() => {
+        location.href = value;
+      },5000)
+
+    }
+      
+  },
   created() {
     const data = this.$route.params.id;
-    this.search=data
-      axios.post("/search", { "query": data })
+    this.query = data
+    this.querySearch=data
+    axios.post("/search", { "query": data })
       .then((res) => {
         this.results = res.data.result
         this.show = false;
@@ -66,44 +110,100 @@ data() {
 
       })
 
-
-
-
   },
-}
+    
+  }
 </script>
 
 <style lang="css" scoped>
-
-.containerWrapper {
-  width: 100vw;
-  min-height: 100vh;
-
+*
+{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.logo {
+.hideResult
+{
+  min-height: 100vh;
+  position: fixed;
+  background-color: var(--color-background);
+  z-index: 30;
+  width: 100%;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.emptydiv
+{
+  /* margin: 1rem; */
+  padding-bottom:100px ;
+}
+.topbar
+{
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  text-align: center;
+  gap: 2rem;
+  background-color: var(--color-background);
+  /* margin-top: -1rem; */
+}
+
+.topWrapper
+{
+  width: 100%;
+  position: fixed;
+  padding: 15px;
+  z-index: 10;
+}
+.logo  span{
   font-family: 'Gravitas One', cursive;
   font-size: medium;
   margin-bottom: 1rem;
-  text-shadow: 0px 0px 1px red;
   text-align: center;
-  width: 15rem;
-
 }
 
-.topsearchbar {
-  padding: 10px;
-  padding-top: 20px;
-  position: fixed;
-}
-
-.searchBar {
-  width: 100%;
+.inputContainer
+{
+  border: 1px solid white;
+  border-radius: 3rem;
   display: flex;
-  gap: 1.5rem;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.indicateResult span
+{
+  color: green;
+  font-weight: bolder;
+}
+.indicateResult,ul
+{
+  padding-left: 10px;
 }
 
-.searchBar input {
+.resutsWrapper
+{
+  padding-top: 10px;
+}
+@media (min-width:500px)
+{
+  .inputContainer
+  {
+      grid-column: 2/4;
+  }
+  .resutsWrapper
+  {
+    grid-column: 2/5;
+    padding-left: 5px;
+  }
+}
+
+.inputContainer input {
   width: 80%;
   background: none;
   border: none;
@@ -113,55 +213,34 @@ data() {
   padding: 10px;
 }
 
-.items-wrapper {
-  width: 30rem;
-  border-radius: 2.8rem;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  box-shadow: 0px 0px 1px white;
-
-}
-
-.search {
-  cursor: pointer;
-}
-
-.search:active {
-  transform: scale(.9);
-
-}
-
-.tabs {
-  display: flex;
-  align-items: center;
+.searchResultsContainer
+{
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
   gap: .5rem;
-  width: 100%;
-
 }
 
-.tabs span {
-  cursor: pointer;
-  font-size: medium;
-  text-transform: capitalize;
+/* small devices */
+
+@media (max-width:500px)
+{
+  .topbar
+  {
+    grid-template-columns: repeat(1,1fr);
+
+  }
+  .searchResultsContainer
+{
+  grid-template-columns: repeat(1,1fr);
 }
 
-.tabs span:hover {
-  font-weight: bold;
+}
+.customLink
+{
+  color: cyan;
   text-decoration: underline;
 }
 
-.cartegorybar {
-  padding-left: 15rem;
-  width: 80%;
-}
 
-.showResults ul li {
-  list-style: none;
-}
-
-.showResults .title {
-  text-transform: capitalize;
-}
 
 </style>
