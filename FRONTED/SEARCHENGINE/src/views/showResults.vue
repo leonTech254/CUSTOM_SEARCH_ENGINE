@@ -1,108 +1,89 @@
-<script setup>
-import showLoading from '../components/showLoading.vue'
-
-</script>
-
 <template>
   <div class="containerWrapper">
- 
-  <showLoading id="showLoading" :myquery="this.$route.params.id"/>
-  
+    <showLoading id="showLoading" :myquery="$route.params.id" />
+
     <div class="topsearchbar">
       <div class="searchBar">
         <div class="logo">
           Custom Search <br> engine
         </div>
-        <div>
-          <div class="items-wrapper">
-            <input type="text" placeholder="search" v-model="query">
-            <span class="search" @click="Searchquery"><i class="fas fa-search" style="font-size: 1rem;"></i></span>
-          </div>
-        </div>
-      </div>
-
-      </div>
-      <div class="seperator"></div>
-      <div class="cartegorybar">
-        <div class="tabs">
-          <span>showing result for "{{ this.$route.params.id }}"</span>
-        </div>
-        <div class="showResults">
-          <ul>
-            <li v-for="(result, index) in results" :key="index"  class="resultBlock">
-              <div class="link">
-                <a :href="result.url">{{ result.url }}</a>
-              </div>
-              <div class="title">{{ result.title }} </div>
-              <div class="content">{{ result.snippet }}</div>
-            </li>
-          </ul>
-
+        <div class="items-wrapper">
+          <input type="text" placeholder="search" v-model="query" />
+          <span class="search" @click="searchQuery">
+            <i class="fas fa-search" style="font-size: 1rem;"></i>
+          </span>
         </div>
       </div>
     </div>
+
+    <div class="seperator"></div>
+
+    <div class="cartegorybar">
+      <div class="tabs">
+        <span>showing result for "{{ $route.params.id }}"</span>
+      </div>
+      <div class="showResults">
+        <ul>
+          <li v-for="(result, index) in results" :key="index" class="resultBlock">
+            <div class="link">
+              <a :href="result.url">{{ result.url }}</a>
+            </div>
+            <div class="title">{{ result.title }}</div>
+            <div class="content">{{ result.snippet }}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import axios from 'axios';
+import showLoading from '../components/showLoading.vue';
 
 export default {
-  props: ['string', 'id'],
+  components: {
+    showLoading,
+  },
   data() {
     return {
       results: [],
       query: null,
-      show:true
-    }
+    };
   },
   methods: {
-    Searchquery()
-    {
-     
-     
-      if (this.query != null) {
-         this.show= true
+    searchQuery() {
+      if (this.query !== null) {
         const searchUrl = `?q=${encodeURIComponent(this.query)}`;
         this.$router.push({ name: 'result', params: { string: searchUrl, id: this.query } });
-        this.search_two()
-        // window.location.replace(searchUrl);
-        
+        this.searchTwo();
       }
     },
-    search_two() {
-      // location.reload();
+    searchTwo() {
       this.query = this.$route.params.id;
-      axios.post("/search", { "query": this.$route.params.id })
+      axios
+        .post('/search', { query: this.$route.params.id })
         .then((res) => {
-          this.results = res.data.result
-          console.log(this.result)
-          this.show = false;
-
-
+          this.results = res.data.result;
         })
         .catch((err) => {
-
-        })
-
+          console.error(err);
+        });
     },
   },
- 
   created() {
     this.query = this.$route.params.id;
-    axios.post("/search", { "query": this.$route.params.id })
+    axios
+      .post('/search', { query: this.$route.params.id })
       .then((res) => {
-        this.results = res.data.result
-        console.log(this.result)
-        this.show = false;
+        this.results = res.data.result;
       })
       .catch((err) => {
-
-      })
+        console.error(err);
+      });
   },
-
-}
+};
 </script>
-
 <style lang="css" scoped>
 .containerWrapper {
   width: 100vw;
