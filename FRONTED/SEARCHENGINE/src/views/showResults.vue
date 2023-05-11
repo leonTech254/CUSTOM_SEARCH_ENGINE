@@ -56,49 +56,49 @@ export default {
     }
   },
   methods: {
-    Searchquery()
-    {
+  //   Searchquery()
+  //   {
      
      
-      if (this.query != null) {
-         this.show= true
-        const searchUrl = `?q=${encodeURIComponent(this.query)}`;
-        this.$router.push({ name: 'result', params: { string: searchUrl, id: this.query } });
-        this.search_two()
-        // window.location.replace(searchUrl);
+  //     if (this.query != null) {
+  //        this.show= true
+  //       const searchUrl = `?q=${encodeURIComponent(this.query)}`;
+  //       this.$router.push({ name: 'result', params: { string: searchUrl, id: this.query } });
+  //       this.search_two()
+  //       // window.location.replace(searchUrl);
         
-      }
-    },
-    search_two() {
-      // location.reload();
-      this.query = this.$route.params.id;
-      axios.post("/search", { "query": this.$route.params.id })
-        .then((res) => {
-          this.results = res.data.result
-          console.log(this.result)
-          this.show = false;
+  //     }
+  //   },
+  //   search_two() {
+  //     // location.reload();
+  //     this.query = this.$route.params.id;
+  //     axios.post("/search", { "query": this.$route.params.id })
+  //       .then((res) => {
+  //         this.results = res.data.result
+  //         console.log(this.result)
+  //         this.show = false;
 
 
-        })
-        .catch((err) => {
+  //       })
+  //       .catch((err) => {
 
-        })
+  //       })
 
-    },
-  },
- 
-  created() {
-  //   // this.query = this.$route.params.id;
-  //   axios.post("/search", { "query": this.$route.params.id })
-  //     .then((res) => {
-  //       this.results = res.data.result
-  //       console.log(this.result)
-  //       this.show = false;
-  //     })
-  //     .catch((err) => {
-
-  //     })
+  //   },
   // },
+ 
+  // created(){} {
+  // //   // this.query = this.$route.params.id;
+  // //   axios.post("/search", { "query": this.$route.params.id })
+  // //     .then((res) => {
+  // //       this.results = res.data.result
+  // //       console.log(this.result)
+  // //       this.show = false;
+  // //     })
+  // //     .catch((err) => {
+
+  // //     })
+  // // },
 
 }
 </script>
