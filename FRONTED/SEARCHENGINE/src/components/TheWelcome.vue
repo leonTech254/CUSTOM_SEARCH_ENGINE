@@ -49,6 +49,7 @@ methods: {
   font-size: xx-large;
   margin-bottom: 1rem;
   text-shadow: 0px 0px 1px red;
+  text-align: center;
 
 }
 .searchBar
