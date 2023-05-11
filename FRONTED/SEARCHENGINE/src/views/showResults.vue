@@ -6,7 +6,7 @@ import showLoading from '../components/showLoading.vue'
 <template>
   <div class="containerWrapper">
  
-  <showLoading id="showLoading" v-if="show" :myquery="this.$route.params.id"/>
+  <showLoading id="showLoading" :myquery="this.$route.params.id"/>
   
     <div class="topsearchbar">
       <div class="searchBar">
