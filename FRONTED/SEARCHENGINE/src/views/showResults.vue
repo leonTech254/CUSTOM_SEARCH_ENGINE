@@ -8,13 +8,15 @@
 <script>
 export default {
 data() {
-  return {
+    return {
+    search:null
     
   }
   },
 
   created() {
     const data = this.$route.params.id;
+    this.search=data
     console.log(data);
   },
 }

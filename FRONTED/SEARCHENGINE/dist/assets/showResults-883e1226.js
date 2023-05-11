@@ -1,1 +1,0 @@
-import{_ as e,o,c as s}from"./index-023afa01.js";const a={data(){return{}},created(){const t=this.$route.params.id;console.log(t)}};function r(t,c,n,d,p,_){return o(),s("div")}const l=e(a,[["render",r]]);export{l as default};
