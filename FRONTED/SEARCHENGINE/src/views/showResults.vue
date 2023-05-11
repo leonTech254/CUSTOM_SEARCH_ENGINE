@@ -14,7 +14,7 @@ data() {
   },
 
   created() {
-    const data = this.$router.currentRoute.params.id;
+    const data = this.$route.params.data;
     console.log(data);
   },
 }
