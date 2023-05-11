@@ -6,7 +6,7 @@ import showLoading from '../components/showLoading.vue'
 <template>
   <div class="containerWrapper">
 
-          <showLoading id="showLoading" :myquery="search" />
+          <showLoading id="showLoading" v-if="show" :myquery="search" />
 
           <div class="topsearchbar">
               <div class="searchBar">
@@ -44,10 +44,12 @@ import showLoading from '../components/showLoading.vue'
       </div>
 </template>
 <script>
+import axios from 'axios';
 export default {
 data() {
     return {
-    search:null
+      search: null,
+      show:false
     
   }
   },
@@ -55,7 +57,18 @@ data() {
   created() {
     const data = this.$route.params.id;
     this.search=data
-    console.log(data);
+      axios.post("/search", { "query": data })
+      .then((res) => {
+        this.results = res.data.result
+        this.show = false;
+      })
+      .catch((err) => {
+
+      })
+
+
+
+
   },
 }
 </script>
